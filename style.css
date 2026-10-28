@@ -410,6 +410,7 @@ legend.name + .hint { clear: both; }
 [hidden] { display: none !important; }
 
 .field.mode { padding-top: 0; }
+.field.mode legend.name { margin-bottom: 10px; }
 
 /* Dropdown, styled like the number boxes */
 .box.select { position: relative; padding: 0; }
@@ -519,3 +520,9 @@ p.name { margin: 0; }
   letter-spacing: -0.02em;
   overflow-wrap: anywhere;
 }
+
+/* Mode toggle: each option carries its own short description */
+.seg.modes span { padding: 10px 12px; }
+.seg.modes b { display: block; font-size: 0.95rem; font-weight: 600; }
+.seg.modes small { display: block; margin-top: 2px; font-size: 0.78rem; line-height: 1.35; color: var(--muted); }
+.seg.modes input:checked + span small { color: #4b5563; }

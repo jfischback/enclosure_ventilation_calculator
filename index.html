@@ -31,10 +31,9 @@
       <form id="form" class="panel inputs" autocomplete="off" novalidate>
         <fieldset class="field mode">
           <legend class="name">Mode</legend>
-          <p class="hint">Design sizes the exhaust for an enclosure that isn't built yet. Audit checks an existing enclosure from measured openings and flow.</p>
-          <div class="seg">
-            <label><input type="radio" name="mode" value="design" checked><span>Design</span></label>
-            <label><input type="radio" name="mode" value="audit"><span>Audit</span></label>
+          <div class="seg modes">
+            <label><input type="radio" name="mode" value="design" checked><span><b>Design</b><small>New enclosure. Size the exhaust and duct.</small></span></label>
+            <label><input type="radio" name="mode" value="audit"><span><b>Audit</b><small>Existing enclosure. Check it against measurements.</small></span></label>
           </div>
         </fieldset>
 
