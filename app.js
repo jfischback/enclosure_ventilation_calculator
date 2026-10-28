@@ -122,7 +122,10 @@ function update() {
   document.querySelectorAll("[data-mode]").forEach((el) => (el.hidden = el.dataset.mode !== mode));
 
   const desc = $("description").value.trim();
-  document.querySelectorAll("[data-desc]").forEach((el) => (el.textContent = desc || "Enclosure"));
+  document.querySelectorAll("[data-desc]").forEach((el) => {
+    el.textContent = desc;
+    el.hidden = !desc;
+  });
 
   const shared = {
     length: num("length"),

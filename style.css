@@ -507,3 +507,15 @@ legend.name + .hint { clear: both; }
   .step-table td.q { width: auto; }
 }
 p.name { margin: 0; }
+
+/* Enclosure description, shown as the heading of the results box */
+.out-desc {
+  margin: 0 0 14px !important;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--dark-line);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
