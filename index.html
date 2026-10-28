@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enclosure Ventilation Calculator | OEMS</title>
+  <meta name="description" content="Enter enclosure dimensions and natural draft openings to get required exhaust airflow, duct size, and an EPA Method 204 permanent total enclosure check.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-name">OEMS</span>
+        <span class="brand-full">Occupational Exposure Management Systems LLC</span>
+      </div>
+      <div class="tag">Exposure assessment tools for Health &amp; Safety Professionals</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <h1>Enclosure Ventilation Calculator</h1>
+      <p class="lead">Enter enclosure dimensions and natural draft openings (NDOs) to get the required exhaust airflow, duct size, and a check against EPA Method&nbsp;204 permanent total enclosure criteria.</p>
+    </section>
+
+    <div class="stack">
+      <form id="form" class="panel inputs" autocomplete="off" novalidate>
+        <div class="grid six">
+          <div class="field s6">
+            <label class="name" for="description">Enclosure description <span class="opt">(optional)</span></label>
+            <p class="hint">A name for this enclosure, such as a booth or line number.</p>
+            <div class="box"><input id="description" type="text" placeholder="e.g. Coating booth 2"></div>
+          </div>
+
+          <div class="field s2">
+            <label class="name" for="length">Length</label>
+            <p class="hint">Inside dimension.</p>
+            <div class="box"><input id="length" type="number" inputmode="decimal" min="0" step="any"><span class="unit">ft</span></div>
+          </div>
+          <div class="field s2">
+            <label class="name" for="width">Width</label>
+            <p class="hint">Inside dimension.</p>
+            <div class="box"><input id="width" type="number" inputmode="decimal" min="0" step="any"><span class="unit">ft</span></div>
+          </div>
+          <div class="field s2">
+            <label class="name" for="height">Height</label>
+            <p class="hint">Inside dimension.</p>
+            <div class="box"><input id="height" type="number" inputmode="decimal" min="0" step="any"><span class="unit">ft</span></div>
+          </div>
+
+          <div class="field s3" id="ndoPctField">
+            <label class="name" for="ndoPct">NDO %</label>
+            <p class="hint">Percent of surface area that is open.</p>
+            <div class="box"><input id="ndoPct" type="number" inputmode="decimal" min="0" step="any" value="5"><span class="unit">%</span></div>
+            <p class="auto-note">Overridden by measured NDO.</p>
+          </div>
+          <div class="field s3">
+            <label class="name" for="measuredNdo">Measured NDO</label>
+            <p class="hint">Measured NDO (ft²), optional. Overrides NDO % when filled in. Use when auditing an existing enclosure.</p>
+            <div class="box"><input id="measuredNdo" type="number" inputmode="decimal" min="0" step="any" placeholder="Not measured"><span class="unit">ft²</span></div>
+          </div>
+
+          <div class="field s3">
+            <label class="name" for="faceVelocity">Face velocity into enclosure</label>
+            <p class="hint">Air velocity inward through the NDOs.</p>
+            <div class="box"><input id="faceVelocity" type="number" inputmode="decimal" min="0" step="any" value="200"><span class="unit">fpm</span></div>
+          </div>
+          <div class="field s3">
+            <label class="name" for="transportVelocity">Minimum duct transport velocity</label>
+            <p class="hint">Used to size the exhaust duct.</p>
+            <div class="box"><input id="transportVelocity" type="number" inputmode="decimal" min="0" step="any" value="2000"><span class="unit">fpm</span></div>
+          </div>
+
+          <div class="field s3 last">
+            <label class="name" for="supplyAir">Supply air into enclosure</label>
+            <p class="hint">Makeup air delivered into the enclosure.</p>
+            <div class="box"><input id="supplyAir" type="number" inputmode="decimal" min="0" step="any" value="0"><span class="unit">CFM</span></div>
+          </div>
+        </div>
+      </form>
+
+      <section class="panel results out" aria-live="polite">
+        <div class="out-head"><p class="out-title">Required exhaust</p></div>
+        <p class="out-sub" id="resultDesc">Enclosure</p>
+        <p class="hero"><span id="qOut"></span><span class="hero-unit">CFM Q&nbsp;Out</span></p>
+
+        <div class="rows">
+          <div class="min-row"><span class="small">Surface area</span><span class="min"><span id="surfaceArea"></span> <span class="u">ft²</span></span></div>
+          <div class="min-row"><span class="small">Volume</span><span class="min"><span id="volume"></span> <span class="u">ft³</span></span></div>
+          <div class="min-row"><span class="small">NDO area</span><span class="min"><span id="ndoArea"></span> <span class="u">ft²</span></span></div>
+          <div class="min-row"><span class="small">Effective NDO</span><span class="min"><span id="effectiveNdoPct"></span> <span class="u">%</span></span></div>
+          <div class="min-row"><span class="small">Air changes per hour</span><span class="min"><span id="ach"></span> <span class="u">ACH</span></span></div>
+          <div class="min-row"><span class="small">Duct size calculated</span><span class="min"><span id="ductCalc"></span> <span class="u">in</span></span></div>
+          <div class="min-row"><span class="small">Stock duct size</span><span class="min"><span id="stockDuct"></span> <span class="u">in</span></span></div>
+          <div class="min-row"><span class="small">Velocity in stock duct</span><span class="min"><span id="velocityInStockDuct"></span> <span class="u">fpm</span></span></div>
+        </div>
+
+        <div class="checks">
+          <div class="min-row"><span class="small">NDO ≤ <span id="ndoLimit"></span>% of surface area</span><span class="pill" id="ndoCheck"></span></div>
+          <div class="min-row"><span class="small">Face velocity ≥ <span id="faceLimit"></span> fpm</span><span class="pill" id="faceCheck"></span></div>
+        </div>
+      </section>
+
+      <section class="panel summary notes">
+        <p class="status"><span class="small">Criteria</span><span>The 5% NDO and 200 fpm face velocity criteria come from EPA Method 204 (40 CFR Part 51, Appendix M).</span></p>
+        <p class="status"><span class="small">Transport velocity</span><span>2,000 fpm is for vapors and gases; particulate typically needs 3,500–4,500 fpm (ACGIH Industrial Ventilation manual).</span></p>
+        <p class="status"><span class="small">Screening only</span><span>This is a screening calculator; final design should be reviewed by a qualified person.</span></p>
+      </section>
+    </div>
+
+    <footer class="foot">
+      <p class="foot-lead">For informational purposes only. This is a free reference tool that supports a qualified professional's judgment. It is not legal, engineering or compliance advice, and using it does not make OEMS anyone's consultant.</p>
+      <ol class="terms">
+        <li><strong>Results depend on your inputs.</strong> The tool assumes accurate enclosure dimensions, NDO areas and velocities. It does not account for duct losses, fan selection, cross drafts, process heat, enclosure leakage outside the NDOs you enter, or capture of specific contaminants. Field verification, such as measuring face velocity or pressure differential, is still required.</li>
+        <li><strong>Not a compliance determination.</strong> A PASS result does not mean an enclosure meets EPA Method 204 or any permit. Method 204 has additional criteria, including NDO distance from emission points and flow direction, and regulations or permits may be stricter. OEMS is not affiliated with or endorsed by EPA or ACGIH. Check the current requirements that apply to you.</li>
+        <li><strong>No warranty; limitation of liability.</strong> The tool is provided "as is," without warranties of any kind, including accuracy, completeness or fitness for a particular purpose. To the fullest extent permitted by law, OEMS is not liable for any loss, injury, penalty or damage arising from use of the tool or reliance on its results. You are responsible for how you use the results.</li>
+        <li><strong>Your data.</strong> All calculations run in your browser. OEMS does not receive or store anything you enter, and the page does not use cookies. Like most websites, the page is delivered by a hosting provider and loads its font from Google, which receive standard request information such as your IP address.</li>
+        <li><strong>Sources.</strong> EPA Method 204, Criteria for and Verification of a Permanent or Temporary Total Enclosure (40 CFR Part 51, Appendix M); ACGIH Industrial Ventilation: A Manual of Recommended Practice for Design.</li>
+      </ol>
+      <p class="copyright">© 2026 Occupational Exposure Management Systems LLC. All rights reserved.</p>
+    </footer>
+  </main>
+
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
