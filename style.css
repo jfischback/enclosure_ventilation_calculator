@@ -522,7 +522,12 @@ p.name { margin: 0; }
 }
 
 /* Mode toggle: each option carries its own short description */
-.seg.modes span { padding: 10px 12px; }
+.seg.modes span { padding: 12px 14px; text-align: left; }
 .seg.modes b { display: block; font-size: 0.95rem; font-weight: 600; }
 .seg.modes small { display: block; margin-top: 2px; font-size: 0.78rem; line-height: 1.35; color: var(--muted); }
 .seg.modes input:checked + span small { color: #4b5563; }
+.seg.modes span { height: 100%; }
+@media (max-width: 520px) {
+  .seg.modes { grid-auto-flow: row; }
+  .seg.modes span { text-align: left; }
+}
