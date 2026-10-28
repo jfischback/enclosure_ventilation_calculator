@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Enclosure Ventilation Calculator | OEMS</title>
-  <meta name="description" content="Enter enclosure dimensions and natural draft openings to get required exhaust airflow, duct size, and an EPA Method 204 permanent total enclosure check.">
+  <meta name="description" content="Design the exhaust for a new enclosure, or audit an existing one from measured openings and airflow, with an EPA Method 204 permanent total enclosure check.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,11 +24,20 @@
   <main class="wrap">
     <section class="intro">
       <h1>Enclosure Ventilation Calculator</h1>
-      <p class="lead">Enter enclosure dimensions and natural draft openings (NDOs) to get the required exhaust airflow, duct size, and a check against EPA Method&nbsp;204 permanent total enclosure criteria.</p>
+      <p class="lead">Design the exhaust for a new enclosure, or audit an existing one from measured openings and airflow. Both modes check EPA Method&nbsp;204 permanent total enclosure criteria.</p>
     </section>
 
     <div class="stack">
       <form id="form" class="panel inputs" autocomplete="off" novalidate>
+        <fieldset class="field mode">
+          <legend class="name">Mode</legend>
+          <p class="hint">Design sizes the exhaust for an enclosure that isn't built yet. Audit checks an existing enclosure from measured openings and flow.</p>
+          <div class="seg">
+            <label><input type="radio" name="mode" value="design" checked><span>Design</span></label>
+            <label><input type="radio" name="mode" value="audit"><span>Audit</span></label>
+          </div>
+        </fieldset>
+
         <div class="grid six">
           <div class="field s6">
             <label class="name" for="description">Enclosure description <span class="opt">(optional)</span></label>
@@ -51,30 +60,77 @@
             <p class="hint">Inside dimension.</p>
             <div class="box"><input id="height" type="number" inputmode="decimal" min="0" step="any"><span class="unit">ft</span></div>
           </div>
+        </div>
 
-          <div class="field s3" id="ndoPctField">
-            <label class="name" for="ndoPct">NDO %</label>
-            <p class="hint">Percent of surface area that is open.</p>
-            <div class="box"><input id="ndoPct" type="number" inputmode="decimal" min="0" step="any" value="5"><span class="unit">%</span></div>
-            <p class="auto-note">Overridden by measured NDO.</p>
-          </div>
+        <div class="grid six" data-mode="design">
           <div class="field s3">
-            <label class="name" for="measuredNdo">Measured NDO</label>
-            <p class="hint">Measured NDO (ft²), optional. Overrides NDO % when filled in. Use when auditing an existing enclosure.</p>
-            <div class="box"><input id="measuredNdo" type="number" inputmode="decimal" min="0" step="any" placeholder="Not measured"><span class="unit">ft²</span></div>
+            <label class="name" for="ndoPct">NDO %</label>
+            <p class="hint">Percent of surface area that is open. Try smaller values to see the airflow drop.</p>
+            <div class="box"><input id="ndoPct" type="number" inputmode="decimal" min="0" step="any" value="5"><span class="unit">%</span></div>
           </div>
-
           <div class="field s3">
             <label class="name" for="faceVelocity">Face velocity into enclosure</label>
-            <p class="hint">Air velocity inward through the NDOs.</p>
+            <p class="hint">Design air velocity inward through the NDOs.</p>
             <div class="box"><input id="faceVelocity" type="number" inputmode="decimal" min="0" step="any" value="200"><span class="unit">fpm</span></div>
           </div>
-          <div class="field s3">
-            <label class="name" for="transportVelocity">Minimum duct transport velocity</label>
-            <p class="hint">Used to size the exhaust duct.</p>
-            <div class="box"><input id="transportVelocity" type="number" inputmode="decimal" min="0" step="any" value="2000"><span class="unit">fpm</span></div>
+        </div>
+
+        <div class="grid six" data-mode="audit" hidden>
+          <div class="field s6">
+            <p class="name">Natural draft openings</p>
+            <p class="hint">Measure each opening: doors, conveyor slots, gaps. Area is added up for the NDO total.</p>
+            <div class="openings">
+              <div class="op-head"><span>Opening <span class="opt">(optional)</span></span><span>Width</span><span>Height</span><span class="op-area">Area</span><span></span></div>
+              <div id="openingRows"></div>
+              <button type="button" class="link" id="addOpening">+ Add opening</button>
+            </div>
           </div>
 
+          <div class="field s6">
+            <label class="name" for="flowSource">Flow reading</label>
+            <p class="hint">Pick the measurement you have. The other flow values are worked out from it.</p>
+            <div class="box select">
+              <select id="flowSource">
+                <option value="cfm">Exhaust airflow in CFM (pitot traverse)</option>
+                <option value="duct">Duct velocity and duct diameter</option>
+                <option value="face">Face velocity at the openings</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field s2" data-flow="cfm">
+            <label class="name" for="exhaustCfm">Exhaust airflow</label>
+            <p class="hint">Measured total exhaust.</p>
+            <div class="box"><input id="exhaustCfm" type="number" inputmode="decimal" min="0" step="any"><span class="unit">CFM</span></div>
+          </div>
+          <div class="field s2" data-flow="duct" hidden>
+            <label class="name" for="ductVelocity">Duct velocity</label>
+            <p class="hint">Average velocity in the exhaust duct.</p>
+            <div class="box"><input id="ductVelocity" type="number" inputmode="decimal" min="0" step="any"><span class="unit">fpm</span></div>
+          </div>
+          <div class="field s2" data-flow="face" hidden>
+            <label class="name" for="measuredFace">Face velocity</label>
+            <p class="hint">Average inward velocity at the openings.</p>
+            <div class="box"><input id="measuredFace" type="number" inputmode="decimal" min="0" step="any"><span class="unit">fpm</span></div>
+          </div>
+          <div class="field s2">
+            <label class="name" for="ductDiameter">Duct diameter <span class="opt" id="ductOpt">(optional)</span></label>
+            <p class="hint">Round exhaust duct. Used for duct velocity.</p>
+            <div class="box"><input id="ductDiameter" type="number" inputmode="decimal" min="0" step="any"><span class="unit">in</span></div>
+          </div>
+          <div class="field s2">
+            <label class="name" for="pressureDiff">Pressure difference <span class="opt">(optional)</span></label>
+            <p class="hint">Measured across the enclosure wall.</p>
+            <div class="box"><input id="pressureDiff" type="number" inputmode="decimal" min="0" step="any" placeholder="Not measured"><span class="unit">in. w.c.</span></div>
+          </div>
+        </div>
+
+        <div class="grid six">
+          <div class="field s3 last">
+            <label class="name" for="transportVelocity">Minimum duct transport velocity</label>
+            <p class="hint">Used to size or check the exhaust duct.</p>
+            <div class="box"><input id="transportVelocity" type="number" inputmode="decimal" min="0" step="any" value="2000"><span class="unit">fpm</span></div>
+          </div>
           <div class="field s3 last">
             <label class="name" for="supplyAir">Supply air into enclosure</label>
             <p class="hint">Makeup air delivered into the enclosure.</p>
@@ -83,9 +139,9 @@
         </div>
       </form>
 
-      <section class="panel results out" aria-live="polite">
+      <section class="panel results out" data-mode="design" aria-live="polite">
         <div class="out-head"><p class="out-title">Required exhaust</p></div>
-        <p class="out-sub" id="resultDesc">Enclosure</p>
+        <p class="out-sub" data-desc>Enclosure</p>
         <p class="hero"><span id="qOut"></span><span class="hero-unit">CFM Q&nbsp;Out</span></p>
 
         <div class="rows">
@@ -100,13 +156,49 @@
         </div>
 
         <div class="checks">
-          <div class="min-row"><span class="small">NDO ≤ <span id="ndoLimit"></span>% of surface area</span><span class="pill" id="ndoCheck"></span></div>
-          <div class="min-row"><span class="small">Face velocity ≥ <span id="faceLimit"></span> fpm</span><span class="pill" id="faceCheck"></span></div>
+          <div class="min-row"><span class="small">NDO ≤ <span data-ndo-limit></span>% of surface area</span><span class="pill" id="ndoCheck"></span></div>
+          <div class="min-row"><span class="small">Face velocity ≥ <span data-face-limit></span> fpm</span><span class="pill" id="faceCheck"></span></div>
+        </div>
+      </section>
+
+      <section class="panel steps" data-mode="design">
+        <div class="out-head"><p class="out-title">Airflow by NDO size</p></div>
+        <p class="out-sub">Same enclosure, face velocity and supply air. Smaller openings need less exhaust and a smaller duct.</p>
+        <table class="step-table">
+          <thead><tr><th>NDO</th><th>NDO area</th><th class="q">Q Out</th><th>Stock duct</th><th>ACH</th></tr></thead>
+          <tbody id="stepRows"></tbody>
+        </table>
+      </section>
+
+      <section class="panel results out" data-mode="audit" aria-live="polite" hidden>
+        <div class="out-head"><p class="out-title">Actual face velocity</p></div>
+        <p class="out-sub" data-desc>Enclosure</p>
+        <p class="hero"><span id="aFace"></span><span class="hero-unit">fpm through NDOs</span></p>
+
+        <div class="rows">
+          <div class="min-row"><span class="small">Surface area</span><span class="min"><span id="aSurfaceArea"></span> <span class="u">ft²</span></span></div>
+          <div class="min-row"><span class="small">Volume</span><span class="min"><span id="aVolume"></span> <span class="u">ft³</span></span></div>
+          <div class="min-row"><span class="small">NDO area</span><span class="min"><span id="aNdoArea"></span> <span class="u">ft²</span></span></div>
+          <div class="min-row"><span class="small">NDO % of surface area</span><span class="min"><span id="aNdoPct"></span> <span class="u">%</span></span></div>
+          <div class="min-row"><span class="small">Exhaust Q Out</span><span class="min"><span id="aQOut"></span> <span class="u">CFM</span></span></div>
+          <div class="min-row"><span class="small">Air changes per hour</span><span class="min"><span id="aAch"></span> <span class="u">ACH</span></span></div>
+          <div class="min-row"><span class="small">Duct velocity</span><span class="min"><span id="aDuctVelocity"></span> <span class="u">fpm</span></span></div>
+          <div class="min-row"><span class="small">Q Out needed for <span data-face-limit></span> fpm</span><span class="min"><span id="aRequiredQ"></span> <span class="u">CFM</span></span></div>
+          <div class="min-row"><span class="small" id="aGapLabel">Flow short of target</span><span class="min"><span id="aGap"></span> <span class="u">CFM</span></span></div>
+          <div class="min-row"><span class="small">Max NDO area at this flow</span><span class="min"><span id="aMaxNdo"></span> <span class="u">ft²</span></span></div>
+        </div>
+
+        <div class="checks">
+          <div class="min-row"><span class="small">NDO ≤ <span data-ndo-limit></span>% of surface area</span><span class="pill" id="aNdoCheck"></span></div>
+          <div class="min-row"><span class="small">Face velocity ≥ <span data-face-limit></span> fpm</span><span class="pill" id="aFaceCheck"></span></div>
+          <div class="min-row"><span class="small">Pressure difference ≥ <span data-pressure-limit></span> in. w.c.</span><span class="pill" id="aPressureCheck"></span></div>
+          <div class="min-row"><span class="small">Duct velocity ≥ transport velocity</span><span class="pill" id="aTransportCheck"></span></div>
         </div>
       </section>
 
       <section class="panel summary notes">
         <p class="status"><span class="small">Criteria</span><span>The 5% NDO and 200 fpm face velocity criteria come from EPA Method 204 (40 CFR Part 51, Appendix M).</span></p>
+        <p class="status" data-mode="audit" hidden><span class="small">Pressure difference</span><span>Method 204 treats a pressure drop of 0.007 in. w.c. across the enclosure as equivalent to 200 fpm face velocity, so either check can show adequate inward flow.</span></p>
         <p class="status"><span class="small">Transport velocity</span><span>2,000 fpm is for vapors and gases; particulate typically needs 3,500–4,500 fpm (ACGIH Industrial Ventilation manual).</span></p>
         <p class="status"><span class="small">Screening only</span><span>This is a screening calculator; final design should be reviewed by a qualified person.</span></p>
       </section>

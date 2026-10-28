@@ -388,15 +388,11 @@ legend.name + .hint { clear: both; }
 
 .grid.six { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .grid.six > .field { padding: 16px 0; border-bottom: 1px solid var(--line); }
-.grid.six > .field:first-child { padding-top: 0; }
 .grid.six > .field.last { border-bottom: 0; padding-bottom: 0; }
 .s2 { grid-column: span 2; }
 .s3 { grid-column: span 3; }
 .s6 { grid-column: 1 / -1; }
 
-.field .auto-note { display: none; }
-.field.overridden .box { opacity: 0.5; }
-.field.overridden .auto-note { display: block; }
 
 .rows, .checks { margin-top: 6px; }
 .rows { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; }
@@ -408,6 +404,106 @@ legend.name + .hint { clear: both; }
 
 @media (max-width: 520px) {
   .grid.six > .field { grid-column: 1 / -1; padding-top: 16px; }
-  .grid.six > .field:first-child { padding-top: 0; }
   .rows { grid-template-columns: 1fr; }
 }
+
+[hidden] { display: none !important; }
+
+.field.mode { padding-top: 0; }
+
+/* Dropdown, styled like the number boxes */
+.box.select { position: relative; padding: 0; }
+.box.select select {
+  flex: 1;
+  min-width: 0;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  padding: 11px 40px 11px 14px;
+  cursor: pointer;
+}
+.box.select::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -6px;
+  border-right: 1.5px solid var(--muted);
+  border-bottom: 1.5px solid var(--muted);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+/* Openings list */
+.op-head, .op-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) 76px 28px;
+  gap: 8px;
+  align-items: center;
+}
+.op-head { font-size: 0.75rem; color: var(--muted); padding-bottom: 6px; }
+.op-row { padding: 3px 0; }
+.op-row .box { padding: 0 10px; }
+.op-row .box input { padding: 8px 0; font-size: 0.92rem; }
+.op-area { text-align: right; font-size: 0.85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.op-head .op-area { font-weight: 400; }
+.op-remove {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+}
+.op-remove:hover { color: var(--text); background: var(--field); }
+.link {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  margin-top: 10px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+}
+.link:hover { text-decoration: underline; }
+
+/* Airflow by NDO size (design mode) */
+.steps { background: #fff; border: 1px solid var(--line); padding: 20px 22px; }
+.steps p { margin: 0; }
+.steps .out-sub { color: var(--muted); }
+.step-table { width: 100%; margin-top: 14px; border-collapse: collapse; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.step-table th { text-align: left; font-size: 0.72rem; font-weight: 500; color: var(--muted); padding: 0 8px 8px 0; }
+.step-table td { padding: 9px 8px 9px 0; border-top: 1px solid var(--line); font-weight: 600; white-space: nowrap; }
+.step-table .u { font-size: 0.72rem; font-weight: 400; color: var(--muted); }
+.step-table td.q { width: 40%; }
+.step-table .q-val { display: block; }
+.step-table .track { margin-top: 5px; height: 5px; background: var(--field); }
+.step-table .fill { background: var(--accent); }
+.step-table tr.current td { background: #eef2ff; }
+.step-table tr.current td:first-child { box-shadow: inset 3px 0 0 var(--accent); padding-left: 8px; }
+.step-table td:first-child, .step-table th:first-child { padding-left: 8px; }
+
+@media (max-width: 520px) {
+  .op-head { display: none; }
+  .op-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 28px; padding: 6px 0; }
+  .op-row .op-area { grid-column: 1 / 3; text-align: left; font-size: 0.78rem; }
+  .op-row .op-remove { grid-row: 1; grid-column: 3; }
+  .op-row .box:first-child { grid-column: 1 / 3; }
+  .steps { padding: 18px 14px; }
+  .step-table { font-size: 0.78rem; }
+  .step-table td.q { width: auto; }
+}
+p.name { margin: 0; }
