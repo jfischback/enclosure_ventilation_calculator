@@ -8,3 +8,4 @@ Plain HTML, CSS, and JavaScript with no build step. To deploy on Vercel, import 
 - `calc.js`: the calculation logic for both modes (design and audit) and the Method 204 thresholds
 - `app.js`: connects the form to the calculation
 - `style.css`: the styles, shared with the OEMS Noise Reduction Calculator
+- `disclaimer.css`, `disclaimer.js`: the first-visit disclaimer gate (agreement is saved in localStorage as `oems_disclaimer_v1`)
