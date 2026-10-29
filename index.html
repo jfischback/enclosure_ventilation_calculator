@@ -9,8 +9,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="disclaimer.css">
+  <script>try { if (localStorage.getItem("oems_disclaimer_v1")) document.documentElement.classList.add("oems-agreed"); } catch (e) {}</script>
 </head>
 <body>
+  <div class="oems-gate" id="oemsGate">
+    <div class="oems-gate-bar">
+      <div class="oems-gate-brand">
+        <span class="oems-gate-name">OEMS</span>
+        <span class="oems-gate-full">Occupational Exposure Management Systems LLC</span>
+      </div>
+    </div>
+    <div class="oems-gate-card" role="dialog" aria-modal="true" aria-labelledby="oemsGateTitle" tabindex="-1">
+      <h2 id="oemsGateTitle">Before you use this tool</h2>
+      <p>This calculator is provided by OEMS (Occupational Exposure Management Systems) for general informational and educational purposes only. It is not professional industrial hygiene, medical, engineering, or legal advice, and it does not replace an evaluation by a qualified professional.</p>
+      <p>Results depend entirely on the information you enter and on the assumptions built into the tool. They may be incomplete, inaccurate, or not applicable to your workplace. You are responsible for verifying all results against applicable regulations (including OSHA standards), manufacturer data, and your organization’s requirements before relying on them.</p>
+      <p>Do not use this tool as the sole basis for decisions that affect worker health or safety, including respirator selection, ventilation design, or hearing protection selection.</p>
+      <p>OEMS makes no warranties, express or implied, about the accuracy, completeness, or fitness for a particular purpose of this tool or its results. To the fullest extent permitted by law, OEMS is not liable for any loss, injury, or damage arising from use of, or reliance on, this tool.</p>
+      <label class="oems-gate-check"><input type="checkbox" id="oemsGateCheck"> <span>I have read and understand this disclaimer, and I agree to use this tool at my own risk.</span></label>
+      <button type="button" class="oems-gate-btn" id="oemsGateBtn" disabled>I agree — continue</button>
+    </div>
+  </div>
+  <script src="disclaimer.js"></script>
+
   <header class="topbar">
     <div class="wrap topbar-inner">
       <div class="brand">
