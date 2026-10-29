@@ -531,3 +531,7 @@ p.name { margin: 0; }
   .seg.modes { grid-auto-flow: row; }
   .seg.modes span { text-align: left; }
 }
+
+/* Length, width and height under one "Enclosure Surface Area" label */
+.dims { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 8px; }
+.dim-label { display: block; margin-bottom: 6px; font-size: 0.78rem; color: var(--muted); }
